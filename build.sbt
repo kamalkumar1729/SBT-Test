@@ -11,13 +11,30 @@ val hellokey = taskKey[Int]("Print hello")
 val taskkey = Seq(hellokey :=  { println("Outside settings"+Calendar.getInstance().getTime+"end line"); 1729} )
 
 
+val zerokey = taskKey[Unit]("first key")
+zerokey:= {
+  println("Zero Key: time is " + Calendar.getInstance().getTime)
+  Thread.sleep(3000)
+}
+
+
+
+val firstkey = taskKey[Unit]("first key")
+firstkey:= {
+  println("First Key: time is " + Calendar.getInstance().getTime)
+  Thread.sleep(1000)
+}
 
 // inside or dependent task are evaluated first
 // here clean will be evaluated before it starts evaluating printkey.
-val  printkey = taskKey[Unit]("")
-printkey := {
-  clean.value
-  println("hello from print task.")
+
+// second = f(zero,first)
+// zero and first executed first, when they BOTH finished , second starts.
+val  secondkey = taskKey[Unit]("second key")
+secondkey := {
+  firstkey.value
+  zerokey.value
+  println("Second Key: time is "+Calendar.getInstance().getTime)
 }
 
 
