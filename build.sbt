@@ -6,7 +6,9 @@ import scala.collection.immutable.{List, Map}
 
 
 val hellokey = taskKey[Int]("Print hello")
-//hellokey :=  println("Outside settings"+Calendar.getInstance().getTime+"end line")
+
+
+val taskkey = Seq(hellokey :=  { println("Outside settings"+Calendar.getInstance().getTime+"end line"); 1729} )
 
 
 
@@ -23,7 +25,6 @@ val playJson = "com.typesafe.play" %% "play-json" % "2.6.9"
 
 lazy val helloCore = (project in file("HelloCore"))
   .settings(
-    name := { println("hello core name initialization"); "Hello Core" },
     libraryDependencies ++= Seq(gigahorse, playJson),
     libraryDependencies += scalaTest % Test,
   )
@@ -32,7 +33,7 @@ lazy val hello = (project in file("."))
   .aggregate(helloCore)
   .dependsOn(helloCore)
   .settings(
-    hellokey := { println("Inside settings "+Calendar.getInstance().getTime+"end line"); 1729},
+    taskkey,
     name := "HelloSbt",
     libraryDependencies += scalaTest % Test,
   )
