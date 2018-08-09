@@ -12,6 +12,16 @@ val taskkey = Seq(hellokey :=  { println("Outside settings"+Calendar.getInstance
 
 
 
+// inside or dependent task are evaluated first
+// here clean will be evaluated before it starts evaluating printkey.
+val  printkey = taskKey[Unit]("")
+printkey := {
+  clean.value
+  println("hello from print task.")
+}
+
+
+
 name := { println(" time at name init is "+ Calendar.getInstance.getTime);  "SBT_test" }
 
 version := "0.1"
